@@ -1,18 +1,18 @@
-import React , {useState}from 'react'
+import React , {useContext, useState}from 'react'
 // import { AiFillPlayCircle } from 'react-icons/ai'
 import { SiEthereum } from 'react-icons/si';
 import { BsInfoCircle } from "react-icons/bs";
 import {Loader} from './'
+import { TransactionContext } from '../context/TransacitonsContext';
 
-const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white'
+const commonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
 const Welcome = () => {
 
+  const { connectWallet, currentAccount } = useContext(TransactionContext);
+  console.log(connectWallet);
   const [isLoading, setIsLoading] = useState(false);
 
-  const connectWallet = () => {
-
-  }
 
 const handleSubmit = () => [
 
@@ -39,12 +39,12 @@ const handleSubmit = () => [
                <p className='text-left mt-5 text-white font-light md: w-9/12'>
                 Explore the crypto world. Buy and sell the cryptocurrency easily!
                </p>
-               <button className='fkex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full hover:[#2546bd] cursor-pointer'
+               {!currentAccount && <button className='fkex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full hover:[#2546bd] cursor-pointer'
                type='button' onClick={connectWallet}>
                 <p className='text-white text-base font-semibold'>
                   Connect Wallet
                 </p>
-               </button>
+               </button>}
                <div className='grid sm:grid-cols-3 grid-col-2 w-full mt-10'> 
                    <div className={`rounded-tl-2xl ${commonStyles}`}>
                     Reliability
@@ -73,7 +73,7 @@ const handleSubmit = () => [
                     </div>
                     <div>
                       <p className='text-white font-light text-sm'>
-                          Address
+                          {connectWallet && currentAccount}
                       </p><p className='text-white font-semibold text-lg mt-1'>
                           Ethereum
                       </p>
