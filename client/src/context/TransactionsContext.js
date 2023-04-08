@@ -22,6 +22,16 @@ const getEthereumContract = () => {
 export const TransactionProvider = ({children}) => {
 
     const [currentAccount, setCurentAccount] = useState('');
+    const [formData,setFormData] = useState({addressTo:'', amount:'', keyword:'', message:''});
+    const [isLoading, setIsLoading] = useState(false);
+    const [ setTransactionCount] = useState(localStorage.getItem('transactionCount'))
+
+    const handleChange = (event, name) => {
+        setFormData((prevState) => (
+            {...prevState, [name]: event.target.value}
+        ))
+        console.log('chnaging')
+    }
 
     const checkWalletConnection = async () => {
         
@@ -49,7 +59,7 @@ export const TransactionProvider = ({children}) => {
             return alert('Connect your metamask wallet!')
         }
         const accounts = await ethereum.request({method:'eth_requestAccounts'});
-
+        console.log(accounts);
         setCurentAccount(accounts[0]);
 
         } catch(error) {
@@ -60,10 +70,40 @@ export const TransactionProvider = ({children}) => {
     }
 
     const sendTransaction = async  () => {
-        if(!ethereum) {
-            return alert('Connect your metmask wallet!');
+        try {
+            if(!ethereum) {
+                return alert('Connect your metmask wallet!');
+            }
+            const {addressTo, amount,keyword, message} = formData;
+            const transactionContract = getEthereumContract();
+            const parsedAmount = ethers.utils.parseEther(amount);
+
+            
+            await ethereum.request({
+                method:'eth_sendTransaction',
+                params: {
+                    from: currentAccount,
+                    to:addressTo,
+                    gas: '0x5208',
+                    value:parsedAmount._hex
+                }
+            })
+
+            const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, keyword, message);
+            setIsLoading(true);
+            console.log(`Loading - ${transactionHash.hash}`);
+            await transactionHash.wait();
+            setIsLoading(false);
+            console.log(`Success - ${transactionHash.hash}`);
+
+            const transactionCount = await transactionContract.getTransactionCount();
+            setTransactionCount(transactionCount.toNumber());
+
+        } catch (error) {
+            throw new Error('No object found!');
         }
-        
+
+
     }
 
     useEffect(() => {
@@ -72,7 +112,7 @@ export const TransactionProvider = ({children}) => {
 
 
 
-    return (<TransactionContext.Provider value={{connectWallet,currentAccount}}>
+    return (<TransactionContext.Provider value={{connectWallet,currentAccount, formData,sendTransaction, handleChange}}>
         {children}
     </TransactionContext.Provider>)
 }
