@@ -2,9 +2,9 @@
 pragma solidity >=0.4.16 <0.9.0;
 
 contract Transactions {
-    uint256 transactionsCount;
+    uint256 public transactionsCount;
     
-    constructor()  {}
+    constructor() {}
 
     event Transfer(address from, address receiver , uint amount , string message, uint timestamp , string keyword );
 
@@ -25,10 +25,10 @@ contract Transactions {
         emit Transfer(msg.sender, receiver, amount, message, block.timestamp,keyword);
     }
 
-    function getAllTransactions() public view returns (TransferStruct[] memory) {
+    function getAllTransactions() public view returns(TransferStruct[] memory) {
         return transactions;
     }
-    function getTransactionsCount() public view returns (uint256) {
+    function getTransactionsCount() public view returns(uint256) {
         return transactionsCount;
     }
 }

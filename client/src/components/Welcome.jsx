@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 // import { AiFillPlayCircle } from 'react-icons/ai'
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
-import { Loader } from "./";
+import { Loader } from ".";
 import { TransactionContext } from "../context/TransactionsContext";
 
 const commonStyles =
@@ -13,8 +13,9 @@ const Welcome = () => {
     connectWallet,
     currentAccount,
     formData,
+    handleChange,
     sendTransaction,
-    handleChange
+    
   } = useContext(TransactionContext);
   
   const [isLoading, setIsLoading] = useState(false);
@@ -30,28 +31,25 @@ const Welcome = () => {
   // }
 
   const handleSubmit = (event) => {
-    const { addressTo, amount, keyword, message } = formData;
     event.preventDefault();
-
-    console.log("clicked");
-    if (!addressTo || !amount || !keyword || !message) return;
+    const { addressTo, amount, keyword, message } = formData;
 
     sendTransaction();
+    if (!addressTo || !amount || !keyword || !message) return;
+
   };
 
   
 
-  const Input = ({ placeholder, name, type, value, handleChange }) => (
+  // const Input = ({ placeholder, name, type, handleChange }) => (
 
-    <input
-      placeholder={placeholder}
-      type={type}
-      step="0.0001"
-      value={value}
-      onChange={handleChange}
-      className="my-2 w-full rounded-sm p-2 outline-none bg-blue-900/25 border-none text-white border-white text-sm white-glassmorphism"
-    /> 
-  );
+  //   <input
+  //     placeholder={placeholder}
+  //     type={type}
+  //     onChange={(e) => {handleChange(e, name)}}
+  //     className="my-2 w-full rounded-sm p-2 outline-none bg-blue-900/25 border-none text-white border-white text-sm white-glassmorphism"
+  //   /> 
+  // );
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <div className="flex md:flex-row flex-col justify-between items-start md:p-20 py-12 px-4">
@@ -102,42 +100,40 @@ const Welcome = () => {
             </div>
           </div>
           <div className="p-5 m-5 sm:w-96 h-80 w-full items-center flex flex-col blue-glassmorphism justify-start">
-            {/* <input
+            <input
               placeholder=" senderAddress"
               type="text"
-              step="0.0001"
               name="addressTo"
-              onChange={(e, name) => {handleChange(e, name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+              onChange={(name) => {handleChange(name)}}
+              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Amount"
               type="text"
-              step="0.0001"
               name="amount"
-              onChange={(e, name) => {handleChange(e, name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+              onChange={( name) => {handleChange(name)}}
+              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Keyword (Gif)"
               type="text"
-              step="0.0001"
               name="keyword"
-              onChange={(e, name) => {handleChange(e, name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+              onChange={(name) => {handleChange( name)}}
+              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Message"
               type="text"
-              step="0.0001"
               name="message"
-              onChange={(e, name) => {handleChange(e, name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-            /> */}
-               <Input placeholder="Address To" name="addressTo " type="text" handleChange={handleChange}  /> 
+              onChange={name => {handleChange(name)}}
+              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
+            />
+            
+{/*             
+               <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange}  /> 
                 <Input placeholder="Amount(ETH)" name="amount" type="number"  handleChange={handleChange}/>
                  <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} /> 
-                <Input placeholder="Enter Message" name="message" type="text"  handleChange={handleChange} /> 
+                <Input placeholder="Enter Message" name="message" type="text"  handleChange={handleChange} />  */}
 
             <div className="h-[1px] w-full bg-gray-400 my-2 mt-4.5 ">
               {isLoading ? (
@@ -156,7 +152,7 @@ const Welcome = () => {
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default Welcome;
