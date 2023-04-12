@@ -99,34 +99,34 @@ const Welcome = () => {
               </div>
             </div>
           </div>
-          <div className="p-5 m-5 sm:w-96 h-80 w-full items-center flex flex-col blue-glassmorphism justify-start">
+          <div className="p-5 m-5 sm:w-96 h-80 w-full items-center flex blue-glassmorphism flex-col justify-start">
             <input
               placeholder=" senderAddress"
               type="text"
               name="addressTo"
               onChange={(name) => {handleChange(name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
+              className="my-2 w-full rounded-sm p-2 outline-none bg-blue-950/75 border-b-2 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Amount"
               type="text"
               name="amount"
-              onChange={( name) => {handleChange(name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
+              onChange={(name) => {handleChange(name)}}
+              className="my-2 w-full rounded-sm p-2 outline-none bg-blue-950/75 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Keyword (Gif)"
               type="text"
               name="keyword"
               onChange={(name) => {handleChange( name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
+              className="my-2 w-full rounded-sm p-2 outline-none bg-blue-950/75 text-white border-none text-sm white-glassmorphism"
             />
             <input
               placeholder="Message"
               type="text"
               name="message"
               onChange={name => {handleChange(name)}}
-              className="my-2 w-full rounded-sm p-2 outline-none bg-transparent bg-blue-900/25 text-white border-none text-sm white-glassmorphism"
+              className="my-2 w-full rounded-sm p-2 outline-none bg-blue-950/75 text-white border-none text-sm white-glassmorphism"
             />
             
 {/*             

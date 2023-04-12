@@ -41,17 +41,19 @@ export const TransactionProvider = ({ children }) => {
   const handleChange = (event, name) => {
     console.log(event.target.value);
     console.log(event.target.name);
-    (setFormData((prevState) => ({ ...prevState, [name]: event.target.value })));
-
+    setFormData((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
   };
 
-  const getAllTransactions = async () => {
+  const getTransactions = async () => {
     try {
       const transactionContract = getEthereumContract();
-
+      // console.log(transactionContract);
       const availableTransactions =
         await transactionContract.getAllTransactions();
-
+      // console.log(availableTransactions);
       const structuredTransactions = availableTransactions.map(
         (transaction) => ({
           addressTo: transaction.receiver,
@@ -65,7 +67,7 @@ export const TransactionProvider = ({ children }) => {
         })
       );
 
-      console.log(structuredTransactions);
+      // console.log(structuredTransactions);
 
       setTransactions(structuredTransactions);
     } catch (error) {
@@ -82,7 +84,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-        getAllTransactions();
+        getTransactions();
       } else {
         console.log("No accounts found!");
       }
@@ -95,8 +97,8 @@ export const TransactionProvider = ({ children }) => {
     try {
       const transactionContract = getEthereumContract();
       const transactionCount = await transactionContract.getTransactionsCount();
-      console.log(transactionCount)
-      window.localStorage.setItem("transactionCount", transactionCount);
+      // window.localStorage.setItem("transactionCount", transactionCount);
+      // console.log(transactionCount)
     } catch (error) {
       console.log(error);
       throw new Error("No ethereum oject");
@@ -126,33 +128,39 @@ export const TransactionProvider = ({ children }) => {
         return alert("Connect your metmask wallet!");
       }
       const { addressTo, amount, keyword, message } = formData;
+      console.log(formData);
+
       const transactionContract = getEthereumContract();
-      const parsedAmount = ethers.utils.parseEther(amount);
+      const value = ethers.utils.parseEther(amount);
+      // const parsedAmount = amount * 10**18
 
-      await ethereum.request({
-        method: "eth_sendTransaction",
-        params: {
-          from: currentAccount,
-          to: addressTo,
-          gas: "0x5208",
-          value: parsedAmount._hex,
-        },
-      });
+      // console.log(parsedAmount)
 
-      const transactionHash = await transactionContract.addToBlockchain(
+      // await ethereum.request({
+      //   method: "eth_sendTransaction",
+      //   params: {
+      //     from: currentAccount,
+      //     to: addressTo,
+      //     gas: "0x5208",
+      //     value: parsedAmount._hex,
+      //   },
+      // });
+
+      const tx = await transactionContract.addToBlockchain(
         addressTo,
-        parsedAmount,
         keyword,
-        message
+        message,
+        {
+          value: value,
+        }
       );
-      setIsLoading(true);
-      console.log(`Loading - ${transactionHash.hash}`);
-      await transactionHash.wait();
-      setIsLoading(false);
-      console.log(`Success - ${transactionHash.hash}`);
-
-      const transactionCount = await transactionContract.getTransactionsCount();
-      setTransactionCount(transactionCount.toNumber());
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        const transactionCount =
+          await transactionContract.getTransactionsCount();
+        console.log("count " + transactionCount.toNumber());
+        setTransactionCount(transactionCount.toNumber());
+      }
 
       // window.reload()
     } catch (error) {
