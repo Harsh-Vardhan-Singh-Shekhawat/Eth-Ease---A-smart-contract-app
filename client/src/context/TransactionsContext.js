@@ -36,11 +36,11 @@ export const TransactionProvider = ({ children }) => {
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   );
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState({});
 
-  const handleChange = (event, name) => {
-    console.log(event.target.value);
-    console.log(event.target.name);
+  const handleChange = (event) => {
+    // console.log(event.target.value);
+    // console.log(event.target.name);
     setFormData((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
@@ -128,7 +128,7 @@ export const TransactionProvider = ({ children }) => {
         return alert("Connect your metmask wallet!");
       }
       const { addressTo, amount, keyword, message } = formData;
-      console.log(formData);
+      console.log(formData);  
 
       const transactionContract = getEthereumContract();
       const value = ethers.utils.parseEther(amount);

@@ -3,8 +3,12 @@ import { TransactionContext } from '../context/TransactionsContext';
 
 import data from '../utils/dummyData'
 
-const TransactionsCard = (addressTo, addressFrom, timestamp, message, amount) => {
+const TransactionsCard = (props) => {
 
+  const {addressFrom, addressTo, timestamp, message, amount} = props.transaction
+  // console.log(addressFrom)
+        console.log(props.transaction.addressFrom)
+  // console.log(amount)
   return (
     <div className="bg-[#181918] m-4 flex flex-1
     2xl:min-w-[450px]
@@ -25,7 +29,7 @@ const TransactionsCard = (addressTo, addressFrom, timestamp, message, amount) =>
           <p className='text-white text-base'>To: {addressTo}</p>
       </a>
     </div>
-    <p className='text-white text-base'>Amount: {amount} ETH</p>
+    <p className='text-white text-base'>Amount: {amount || 0} ETH</p>
 
     {message && (
       <>
@@ -45,8 +49,12 @@ const TransactionsCard = (addressTo, addressFrom, timestamp, message, amount) =>
 const Transactions = () => { 
 
   const {transactions,currentAccount} = useContext(TransactionContext);
-
-  console.log(transactions);
+ 
+  // console.log(transactions[2])
+ 
+// const list = transactions.forEach((transaction,i) => 
+//   (<TransactionsCard key={i} transaction =  {transaction}  /> ))
+  
   return (
     <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
       <div className="flex flex-col md:p-12 py-12 px-4">
@@ -61,9 +69,7 @@ const Transactions = () => {
         )}
       </div>
       {currentAccount && <div className="flex flex-wrap justify-center items-center mt-10">
-          {/* {transactions.reverse().map((i,transaction) => (
-            <TransactionsCard key={i}  {...transaction}/>
-          ))} */}
+        {/* {list} */}
         </div>
         }
     </div>
